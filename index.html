@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Horario Laboral</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background-color: rgba(165, 167, 46, 0.529);">
+    <header>
+        <h1 style="text-align: center;">BAR LA BOTA</h1>
+    </header>
+    <div class="container">
+        <h2>Control de Horario Laboral</h2>
+        <p>Horario: Martes a Domingo, entrada automática a las 12:00</p>
+        <div id="current-day">
+            <h2>Día Actual</h2>
+            <p id="day-name"></p>
+            <div>
+                <h3>Turno 1</h3>
+                <p>Entrada: <span id="entry-time-1">12:00</span></p>
+                <p>Salida: <span id="exit-time-1">--:--</span></p>
+                <button id="mark-exit-1" style="background-color: rgba(165, 167, 46, 0.529); color: black;">Marcar Salida Turno 1</button>
+                <button id="edit-exit-1" style="display:none; background-color: rgba(165, 167, 46, 0.529);">Editar Salida Turno 1</button>
+                <p>Horas: <span id="hours-worked-1">0 horas y 0 minutos</span></p>
+            </div>
+            <div>
+                <h3>Turno 2</h3>
+                <p>Entrada: <span id="entry-time-2">20:00</span></p>
+                <p>Salida: <span id="exit-time-2">--:--</span></p>
+                <button id="mark-exit-2" style="background-color: rgba(165, 167, 46, 0.529);">Marcar Salida Turno 2</button>
+                <button id="edit-exit-2" style="display:none; background-color: rgba(165, 167, 46, 0.529);">Editar Salida Turno 2</button>
+                <p>Horas: <span id="hours-worked-2">0 horas y 0 minutos</span></p>
+            </div>
+            <p>Total día: <span id="total-day">0 horas y 0 minutos</span></p>
+        </div>
+        <div id="weekly-summary">
+            <h2>Resumen Semanal</h2>
+            <table id="summary-table">
+                <thead>
+                    <tr>
+                        <th>Día</th>
+                        <th>Entrada 1</th>
+                        <th>Salida 1</th>
+                        <th>Horas 1</th>
+                        <th>Entrada 2</th>
+                        <th>Salida 2</th>
+                        <th>Horas 2</th>
+                        <th>Total Día</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="summary-body">
+                </tbody>
+            </table>
+            <p>Total semanal: <span id="total-hours">0 horas y 0 minutos</span></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
