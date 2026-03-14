@@ -39,6 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function loadData() {
         const data = JSON.parse(localStorage.getItem('workHours') || '{}');
+        // Inicializar datos para fechas específicas si no existen
+        if (!data['2026-03-11']) {
+            data['2026-03-11'] = { exit1: '16:40', exit2: '24:40' };
+        }
+        if (!data['2026-03-12']) {
+            data['2026-03-12'] = { exit1: '16:50', exit2: '24:20' };
+        }
+        if (!data['2026-03-13']) {
+            data['2026-03-13'] = { exit1: '16:45', exit2: '24:30' };
+        }
         return data;
     }
 
@@ -140,6 +150,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalDecimal = 0;
 
         weekDates.forEach(date => {
+            // Excluir fechas específicas: 9 y 10 de marzo de 2026
+            if (date === '2026-03-09' || date === '2026-03-10') {
+                return;
+            }
             const dayOfWeek = new Date(date).getDay();
             const dayName = days[dayOfWeek];
             const displayDate = new Date(date).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'});
@@ -250,30 +264,23 @@ document.addEventListener('DOMContentLoaded', function() {
     summaryBody.addEventListener('click', function(e) {
         if (e.target.classList.contains('edit-btn')) {
             const date = e.target.dataset.date;
-            const turno = prompt('¿Qué turno deseas editar? (1: Turno 1, 2: Turno 2)', '');
             const data = loadData();
-            if (turno === '1') {
-                const currentExit = data[date] ? data[date].exit1 : '';
-                const newExit = prompt('Nueva hora de salida Turno 1 (HH:MM):', currentExit);
-                if (newExit && validateTime(newExit)) {
-                    if (!data[date]) data[date] = {};
-                    data[date].exit1 = newExit;
-                } else if (newExit !== null) {
-                    alert('Formato inválido.');
-                    return;
-                }
-            } else if (turno === '2') {
-                const currentExit = data[date] ? data[date].exit2 : '';
-                const newExit = prompt('Nueva hora de salida Turno 2 (HH:MM):', currentExit);
-                if (newExit && validateTime(newExit)) {
-                    if (!data[date]) data[date] = {};
-                    data[date].exit2 = newExit;
-                } else if (newExit !== null) {
-                    alert('Formato inválido.');
-                    return;
-                }
-            } else {
-                alert('Opción inválida.');
+            const currentExit1 = data[date] ? data[date].exit1 : '';
+            const currentExit2 = data[date] ? data[date].exit2 : '';
+            const newExit1 = prompt('Nueva hora de salida Turno 1 (HH:MM):', currentExit1);
+            if (newExit1 && validateTime(newExit1)) {
+                if (!data[date]) data[date] = {};
+                data[date].exit1 = newExit1;
+            } else if (newExit1 !== null) {
+                alert('Formato inválido para Turno 1.');
+                return;
+            }
+            const newExit2 = prompt('Nueva hora de salida Turno 2 (HH:MM):', currentExit2);
+            if (newExit2 && validateTime(newExit2)) {
+                if (!data[date]) data[date] = {};
+                data[date].exit2 = newExit2;
+            } else if (newExit2 !== null) {
+                alert('Formato inválido para Turno 2.');
                 return;
             }
             saveData(data);
@@ -282,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (e.target.classList.contains('delete-btn')) {
             const date = e.target.dataset.date;
-            const choice = prompt('¿Qué deseas eliminar? (1: Turno 1, 2: Turno 2, d: Día completo)', '');
+            const choice = prompt('Elige una opción:\n1: Eliminar Turno 1\n2: Eliminar Turno 2\n3: Resetear turno completo (eliminar día completo)', '');
             const data = loadData();
             let itemToDelete = '';
             let action = () => {};
@@ -292,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (choice === '2') {
                 itemToDelete = 'el Turno 2';
                 action = () => { if (data[date]) delete data[date].exit2; };
-            } else if (choice === 'd') {
+            } else if (choice === '3') {
                 itemToDelete = 'el día completo';
                 action = () => { delete data[date]; };
             } else {
